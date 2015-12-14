@@ -29,9 +29,11 @@ import xyz.yhsj.event.OnItemChildCheckedChangeListener;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
 import xyz.yhsj.viewholder.BaseListViewHolder;
-import xyz.yhsj.viewholder.ViewHolderHelper;
+import xyz.yhsj.helper.ViewHolderHelper;
 
 /**
+ * Listview适配器
+ *
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:15/5/21 上午1:05
  * 描述:AdapterView适配器

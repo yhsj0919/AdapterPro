@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.yhsj.viewholder;
+package xyz.yhsj.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,6 +36,7 @@ import android.widget.TextView;
 import xyz.yhsj.event.OnItemChildCheckedChangeListener;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
+import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com

@@ -30,9 +30,11 @@ import xyz.yhsj.event.OnItemChildLongClickListener;
 import xyz.yhsj.event.OnItemClickListener;
 import xyz.yhsj.event.OnItemLongClickListener;
 import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
-import xyz.yhsj.viewholder.ViewHolderHelper;
+import xyz.yhsj.helper.ViewHolderHelper;
 
 /**
+ * RecyclerView 适配器
+ *
  * @param <T> 适配的数据类型
  */
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewHolder> {

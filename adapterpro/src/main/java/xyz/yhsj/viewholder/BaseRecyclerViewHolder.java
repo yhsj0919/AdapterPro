@@ -22,6 +22,7 @@ import android.view.View;
 
 import xyz.yhsj.event.OnItemClickListener;
 import xyz.yhsj.event.OnItemLongClickListener;
+import xyz.yhsj.helper.ViewHolderHelper;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com

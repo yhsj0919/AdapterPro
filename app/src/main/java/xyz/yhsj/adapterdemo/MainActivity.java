@@ -3,6 +3,9 @@ package xyz.yhsj.adapterdemo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,42 +18,61 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import xyz.yhsj.adapterdemo.adapter.MyAdapter;
+import xyz.yhsj.adapterdemo.adapter.TabAdapter;
 import xyz.yhsj.adapterdemo.model.User;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemClickListener;
+import xyz.yhsj.helper.TabLayoutHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private MyAdapter adapter;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private TabLayoutHelper<String> tabLayoutHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        init();
+    }
+
+
+    private void init() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(recyclerView);
+        tabLayoutHelper = new TabLayoutHelper<String>();
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(ViewGroup parent, View itemView, int position) {
-                Snackbar.make(itemView, "......."+position, Snackbar.LENGTH_LONG).show();
-            }
-        });
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        ArrayList<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            users.add(new User("名称：" + i, "年龄：" + i));
-        }
-
-        adapter.setDatas(users);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
-        recyclerView.setAdapter(adapter);
+        tabInit();
+
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setCurrentItem(2);
+    }
+
+    private void tabInit() {
+
+        TabAdapter adapter2 = new TabAdapter(this, getSupportFragmentManager());
+
+        tabLayoutHelper.bindTab(this,tabLayout, viewPager);
+
+        tabLayoutHelper.addFragment(new Fragment_Test(), "待办");
+        tabLayoutHelper.addFragment(new Fragment_Test(), "消息");
+        tabLayoutHelper.addFragment(new Fragment_Test(), "联系人");
+
+
+        tabLayoutHelper.addFragment(new Fragment_Test(), "我的");
+
 
     }
+
+
 }
