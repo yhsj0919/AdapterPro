@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 
 import xyz.yhsj.adapterdemo.R;
 import xyz.yhsj.adapterdemo.model.User;
-import xyz.yhsj.viewholder.BaseRecyclerViewAdapter;
+import xyz.yhsj.adapter.BaseRecyclerViewAdapter;
 import xyz.yhsj.viewholder.ViewHolderHelper;
 
 /**

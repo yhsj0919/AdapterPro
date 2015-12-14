@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.yhsj.viewholder;
+package xyz.yhsj.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +29,8 @@ import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
 import xyz.yhsj.event.OnItemClickListener;
 import xyz.yhsj.event.OnItemLongClickListener;
+import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
+import xyz.yhsj.viewholder.ViewHolderHelper;
 
 /**
  * @param <T> 适配的数据类型

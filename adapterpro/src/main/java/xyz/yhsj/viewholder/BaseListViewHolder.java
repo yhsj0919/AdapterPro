@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package xyz.yhsj.adapter;
+package xyz.yhsj.viewholder;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import xyz.yhsj.viewholder.ViewHolderHelper;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
