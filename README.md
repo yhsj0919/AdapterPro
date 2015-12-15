@@ -3,6 +3,10 @@
 
 新增了tablayout的adapter和帮助类。
 
+BaseListViewAdapter适用于list，GridView
+BaseRecyclerViewAdapter 适用于RecyclerView
+BaseTabLayoutAdapter 适用于tablayout和ViewPager的组合
+
 ```java
 
 //不带自定义tab
