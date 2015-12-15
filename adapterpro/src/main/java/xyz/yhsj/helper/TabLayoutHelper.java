@@ -71,6 +71,37 @@ public class TabLayoutHelper<T> {
     }
 
     /**
+     * 删除Fragment同时刷新tab，当绑定时使用的是不含自定义view的方法时，请传入String类型的数据
+     *
+     * @param position
+     */
+    public void removeFragment(int position) {
+        adapter.removeFragment(position);
+        bindTab();
+    }
+
+    /**
+     * 删除Fragment同时刷新tab，当绑定时使用的是不含自定义view的方法时，请传入String类型的数据
+     *
+     * @param fragment
+     */
+    public void removeFragment(Fragment fragment) {
+        adapter.removeFragment(fragment);
+        bindTab();
+    }
+
+    /**
+     * 删除Fragment同时刷新tab，当绑定时使用的是不含自定义view的方法时，请传入String类型的数据
+     *
+     * @param data
+     */
+    public void removeFragment(T data) {
+        adapter.removeFragment(data);
+        bindTab();
+    }
+
+
+    /**
      * 绑定tab
      * 每次更新了数据需要重新绑定，技术有限，暂时没有别的方法。
      */
@@ -88,5 +119,10 @@ public class TabLayoutHelper<T> {
             }
         }
 
+    }
+
+
+    public BaseTabLayoutAdapter getAdapter() {
+        return adapter;
     }
 }

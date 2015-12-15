@@ -14,7 +14,7 @@ import xyz.yhsj.viewholder.TabLayoutViewHolder;
 
 /**
  * TabLayout适配器
- *
+ * <p/>
  * Created by LOVE on 2015/12/14.
  */
 public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter {
@@ -23,7 +23,7 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
 
     protected final int mItemLayoutId;
 
-    private List<Fragment> mFragments = new ArrayList<>();
+    protected List<Fragment> mFragments;
 
     protected List<T> mDatas;
 
@@ -33,11 +33,62 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
         this.mContext = context;
         this.mItemLayoutId = mItemLayoutId;
         mDatas = new ArrayList<>();
+        mFragments = new ArrayList<>();
     }
 
+    /**
+     * 添加页面，不建议直接使用，请配合helper，可能会产生tab无法添加的情况
+     *
+     * @param fragment
+     * @param newData
+     */
     public void addFragment(Fragment fragment, T newData) {
         mFragments.add(fragment);
         mDatas.add(newData);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除页面，不建议直接使用，请配合helper，可能会产生tab无法删除的情况
+     *
+     * @param position
+     */
+    public void removeFragment(int position) {
+        if ((position < mDatas.size() || position < mFragments.size()) && position >= 0) {
+            mFragments.remove(position);
+            mDatas.remove(position);
+        }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除页面，不建议直接使用，请配合helper，可能会产生tab无法删除的情况
+     *
+     * @param fragment
+     */
+    public void removeFragment(Fragment fragment) {
+        int position = mFragments.indexOf(fragment);
+
+        if (position < mDatas.size() || position < mFragments.size()) {
+            mFragments.remove(position);
+            mDatas.remove(position);
+        }
+
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 删除页面，不建议直接使用，请配合helper，可能会产生tab无法删除的情况
+     *
+     * @param data
+     */
+    public void removeFragment(T data) {
+        int position = mDatas.indexOf(data);
+
+        if (position < mDatas.size() || position < mFragments.size()) {
+            mFragments.remove(position);
+            mDatas.remove(position);
+        }
         notifyDataSetChanged();
     }
 
@@ -56,6 +107,13 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
         return mDatas.get(position).toString();
     }
 
+
+    /**
+     * 自定义view时使用，获取tab的填充布局
+     *
+     * @param position
+     * @return
+     */
     public View getTabView(int position) {
 
         final TabLayoutViewHolder viewHolder = TabLayoutViewHolder.dequeueReusableAdapterViewHolder(mContext, mItemLayoutId);

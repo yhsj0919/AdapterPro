@@ -17,7 +17,6 @@ public class TabAdapter extends BaseTabLayoutAdapter<String> {
         super(context, fm, R.layout.tab_item);
     }
 
-
     @Override
     public CharSequence getPageTitle(int position) {
         return mDatas.get(position);
@@ -27,6 +26,7 @@ public class TabAdapter extends BaseTabLayoutAdapter<String> {
     protected View bindData(ViewHolderHelper viewHolderHelper, int position, String model) {
 
         viewHolderHelper.setText(R.id.text, model);
+        viewHolderHelper.setText(R.id.text1, position+"");
 
         return viewHolderHelper.getConvertView();
     }
