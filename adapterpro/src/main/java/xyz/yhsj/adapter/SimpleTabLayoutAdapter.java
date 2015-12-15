@@ -6,10 +6,10 @@ import android.view.View;
 
 import xyz.yhsj.helper.ViewHolderHelper;
 
-/**一个不含自定义布局的Tab适配器，用于helper中，不建议继承
+/**一个不含自定义布局的Tab适配器，用于helper中
  * Created by LOVE on 2015/12/14.
  */
-public class SimpleTabLayoutAdapter extends BaseTabLayoutAdapter<String> {
+public final class SimpleTabLayoutAdapter extends BaseTabLayoutAdapter<String> {
     public SimpleTabLayoutAdapter(Context context, FragmentManager fm) {
         super(context, fm, 0);
     }
