@@ -15,8 +15,8 @@ public final class SimpleTabLayoutAdapter extends BaseTabLayoutAdapter<String> {
     }
 
     @Override
-    protected View bindData(ViewHolderHelper viewHolderHelper, int position, String model) {
-        return null;
+    protected void bindData(ViewHolderHelper viewHolderHelper, int position, String model) {
+
     }
 
     @Override

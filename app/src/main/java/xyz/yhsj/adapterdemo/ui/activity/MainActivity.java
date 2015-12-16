@@ -1,4 +1,4 @@
-package xyz.yhsj.adapterdemo;
+package xyz.yhsj.adapterdemo.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -6,7 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import xyz.yhsj.adapterdemo.R;
 import xyz.yhsj.adapterdemo.adapter.TabAdapter;
+import xyz.yhsj.adapterdemo.ui.fragment.Fragment_Test;
+import xyz.yhsj.adapterdemo.ui.fragment.GridViewDemoFragment;
+import xyz.yhsj.adapterdemo.ui.fragment.ListViewDemoFragment;
+import xyz.yhsj.adapterdemo.ui.fragment.RecyclerViewDemoFragment;
 import xyz.yhsj.helper.TabLayoutHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,22 +43,19 @@ public class MainActivity extends AppCompatActivity {
 
         tabInit();
 
-        viewPager.setOffscreenPageLimit(2);
-        viewPager.setCurrentItem(2);
     }
 
     private void tabInit() {
 
         TabAdapter adapter = new TabAdapter(this, getSupportFragmentManager());
 
-        tabLayoutHelper.bindTab(tabLayout, viewPager,adapter);
+        tabLayoutHelper.bindTab(tabLayout, viewPager, adapter);
 
-        tabLayoutHelper.addFragment(new Fragment_Test(), "待办");
-        tabLayoutHelper.addFragment(new Fragment_Test(), "消息");
-        tabLayoutHelper.addFragment(new Fragment_Test(), "联系人");
-        tabLayoutHelper.addFragment(new Fragment_Test(), "我的");
-        tabLayoutHelper.removeFragment("我的");
+        tabLayoutHelper.addFragment(new GridViewDemoFragment(), "GridView");
+        tabLayoutHelper.addFragment(new ListViewDemoFragment(), "ListView");
+        tabLayoutHelper.addFragment(new RecyclerViewDemoFragment(), "RecyclerView");
 
+        viewPager.setOffscreenPageLimit(2);
     }
 
 

@@ -1,10 +1,12 @@
-package xyz.yhsj.adapterdemo;
+package xyz.yhsj.adapterdemo.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import xyz.yhsj.adapterdemo.R;
 
 
 public class Fragment_Test extends Fragment {

@@ -23,11 +23,10 @@ public class TabAdapter extends BaseTabLayoutAdapter<String> {
     }
 
     @Override
-    protected View bindData(ViewHolderHelper viewHolderHelper, int position, String model) {
+    protected void bindData(ViewHolderHelper viewHolderHelper, int position, String model) {
 
         viewHolderHelper.setText(R.id.text, model);
         viewHolderHelper.setText(R.id.text1, position+"");
 
-        return viewHolderHelper.getConvertView();
     }
 }

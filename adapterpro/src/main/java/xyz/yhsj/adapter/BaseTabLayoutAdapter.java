@@ -119,7 +119,13 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
         final TabLayoutViewHolder viewHolder = TabLayoutViewHolder.dequeueReusableAdapterViewHolder(mContext, mItemLayoutId);
         viewHolder.getViewHolderHelper().setPosition(position);
 
-        return bindData(viewHolder.getViewHolderHelper(), position, mDatas.get(position));
+        bindData(viewHolder.getViewHolderHelper(), position, mDatas.get(position));
+
+        if (position == 0) {
+            viewHolder.getViewHolderHelper().getConvertView().setSelected(true);
+        }
+
+        return viewHolder.getViewHolderHelper().getConvertView();
     }
 
 
@@ -130,7 +136,7 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
      * @param position
      * @param model
      */
-    protected abstract View bindData(ViewHolderHelper viewHolderHelper, int position, T model);
+    protected abstract void bindData(ViewHolderHelper viewHolderHelper, int position, T model);
 
 
 }
