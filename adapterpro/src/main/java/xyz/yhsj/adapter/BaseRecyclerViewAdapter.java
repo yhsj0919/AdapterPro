@@ -72,7 +72,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         viewHolder.getViewHolderHelper().setOnItemChildClickListener(mOnItemChildClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildLongClickListener(mOnItemChildLongClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildCheckedChangeListener(mOnItemChildCheckedChangeListener);
-        setItemChildListener(viewHolder.getViewHolderHelper());
+        bindItemChildEvent(viewHolder.getViewHolderHelper());
         return viewHolder;
     }
 
@@ -81,7 +81,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
      *
      * @param viewHolderHelper
      */
-    protected void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
     }
 
     @Override

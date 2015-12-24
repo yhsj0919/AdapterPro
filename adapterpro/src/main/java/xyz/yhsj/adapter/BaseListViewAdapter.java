@@ -74,7 +74,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
         viewHolder.getViewHolderHelper().setOnItemChildClickListener(mOnItemChildClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildLongClickListener(mOnItemChildLongClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildCheckedChangeListener(mOnItemChildCheckedChangeListener);
-        setItemChildListener(viewHolder.getViewHolderHelper());
+        bindItemChildEvent(viewHolder.getViewHolderHelper());
 
         bindData(viewHolder.getViewHolderHelper(), position, getItem(position));
         return viewHolder.getConvertView();
@@ -85,7 +85,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      *
      * @param viewHolderHelper
      */
-    protected void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
     }
 
     /**

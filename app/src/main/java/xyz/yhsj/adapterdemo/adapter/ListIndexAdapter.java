@@ -18,7 +18,7 @@ public class ListIndexAdapter extends BaseListViewAdapter<IndexModel> {
     }
 
     @Override
-    protected void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
         viewHolderHelper.setItemChildClickListener(R.id.tv_item_indexview_name);
     }
 

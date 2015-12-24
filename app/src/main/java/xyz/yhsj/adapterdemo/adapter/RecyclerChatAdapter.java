@@ -17,7 +17,7 @@ public class RecyclerChatAdapter extends BaseRecyclerViewAdapter<ChatModel> {
     }
 
     @Override
-    public void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    public void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
     }
 
     @Override

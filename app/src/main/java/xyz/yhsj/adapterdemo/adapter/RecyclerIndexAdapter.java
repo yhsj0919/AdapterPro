@@ -17,8 +17,8 @@ public class RecyclerIndexAdapter extends BaseRecyclerViewAdapter<IndexModel> {
     }
 
     @Override
-    public void setItemChildListener(ViewHolderHelper viewHolderHelper) {
-        viewHolderHelper.setItemChildClickListener(R.id.tv_item_indexview_name);
+    public void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
+            viewHolderHelper.setItemChildClickListener(R.id.tv_item_indexview_name);
     }
 
     @Override

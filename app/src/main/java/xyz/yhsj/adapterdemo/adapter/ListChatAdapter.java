@@ -18,7 +18,7 @@ public class ListChatAdapter extends BaseListViewAdapter<ChatModel> {
     }
 
     @Override
-    protected void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
     }
 
     @Override

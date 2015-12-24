@@ -28,7 +28,7 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
     }
 
     @Override
-    public void setItemChildListener(final ViewHolderHelper viewHolderHelper) {
+    public void bindItemChildEvent(final ViewHolderHelper viewHolderHelper) {
         viewHolderHelper.setItemChildClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildLongClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildCheckedChangeListener(R.id.cb_item_normal_status);

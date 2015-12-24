@@ -19,7 +19,7 @@ public class NormalAdapterViewAdapter extends BaseListViewAdapter<NormalModel> {
     }
 
     @Override
-    protected void setItemChildListener(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
         viewHolderHelper.setItemChildClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildLongClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildCheckedChangeListener(R.id.cb_item_normal_status);
