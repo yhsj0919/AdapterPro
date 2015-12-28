@@ -57,6 +57,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
         mContext = context;
         mItemLayoutId = itemLayoutId;
         mDatas = new ArrayList<>();
+        mObj=new HashMap<>();
     }
 
     @Override

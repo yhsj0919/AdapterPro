@@ -62,7 +62,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         mContext = mRecyclerView.getContext();
         mItemLayoutId = itemLayoutId;
         mDatas = new ArrayList<>();
-
+        mObj=new HashMap<>();
         if (mRecyclerView.getLayoutManager() == null) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         }

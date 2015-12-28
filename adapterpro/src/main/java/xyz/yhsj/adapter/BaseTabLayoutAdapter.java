@@ -38,6 +38,7 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
         this.mContext = context;
         this.mItemLayoutId = mItemLayoutId;
         mDatas = new ArrayList<>();
+        mObj=new HashMap<>();
         mFragments = new ArrayList<>();
     }
 
