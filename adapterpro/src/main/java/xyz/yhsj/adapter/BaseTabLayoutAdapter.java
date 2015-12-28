@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.yhsj.helper.ViewHolderHelper;
@@ -14,7 +15,7 @@ import xyz.yhsj.viewholder.TabLayoutViewHolder;
 
 /**
  * TabLayout适配器
- * <p/>
+ * <p>
  * Created by LOVE on 2015/12/14.
  */
 public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter {
@@ -27,6 +28,10 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
 
     protected List<T> mDatas;
 
+    /**
+     * 扩充数据，用于某些特殊的多数据源场景
+     */
+    protected HashMap<String, Object> mObj;
 
     public BaseTabLayoutAdapter(Context context, FragmentManager fm, int mItemLayoutId) {
         super(fm);
@@ -138,5 +143,11 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
      */
     protected abstract void bindData(ViewHolderHelper viewHolderHelper, int position, T model);
 
+    public Object getmObj(String key) {
+        return mObj.get(key);
+    }
 
+    public void addmObj(String key, Object mObj) {
+        this.mObj.put(key, mObj);
+    }
 }

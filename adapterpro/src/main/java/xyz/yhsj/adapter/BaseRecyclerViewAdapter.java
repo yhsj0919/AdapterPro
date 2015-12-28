@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.yhsj.event.OnItemChildCheckedChangeListener;
@@ -30,8 +31,8 @@ import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
 import xyz.yhsj.event.OnItemClickListener;
 import xyz.yhsj.event.OnItemLongClickListener;
-import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
 import xyz.yhsj.helper.ViewHolderHelper;
+import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
 
 /**
  * RecyclerView 适配器
@@ -47,6 +48,12 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     protected OnItemChildCheckedChangeListener mOnItemChildCheckedChangeListener;
     protected OnItemClickListener mOnItemClickListener;
     protected OnItemLongClickListener mOnItemLongClickListener;
+
+
+    /**
+     * 扩充数据，用于某些特殊的多数据源场景
+     */
+    protected HashMap<String, Object> mObj;
 
     protected RecyclerView mRecyclerView;
 
@@ -280,5 +287,13 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     public void moveItem(int fromPosition, int toPosition) {
         mDatas.add(toPosition, mDatas.remove(fromPosition));
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public Object getmObj(String key) {
+        return mObj.get(key);
+    }
+
+    public void addmObj(String key, Object mObj) {
+        this.mObj.put(key, mObj);
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 bingoogolapple
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,17 +23,18 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.yhsj.event.OnItemChildCheckedChangeListener;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
-import xyz.yhsj.viewholder.BaseListViewHolder;
 import xyz.yhsj.helper.ViewHolderHelper;
+import xyz.yhsj.viewholder.BaseListViewHolder;
 
 /**
  * Listview适配器
- *
+ * <p>
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:15/5/21 上午1:05
  * 描述:AdapterView适配器
@@ -42,6 +43,12 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
     protected final int mItemLayoutId;
     protected Context mContext;
     protected List<T> mDatas;
+
+    /**
+     * 扩充数据，用于某些特殊的多数据源场景
+     */
+    protected HashMap<String, Object> mObj;
+
     protected OnItemChildClickListener mOnItemChildClickListener;
     protected OnItemChildLongClickListener mOnItemChildLongClickListener;
     protected OnItemChildCheckedChangeListener mOnItemChildCheckedChangeListener;
@@ -258,5 +265,14 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
     public void moveItem(int fromPosition, int toPosition) {
         Collections.swap(mDatas, fromPosition, toPosition);
         notifyDataSetChanged();
+    }
+
+
+    public Object getmObj(String key) {
+        return mObj.get(key);
+    }
+
+    public void addmObj(String key, Object mObj) {
+        this.mObj.put(key, mObj);
     }
 }
