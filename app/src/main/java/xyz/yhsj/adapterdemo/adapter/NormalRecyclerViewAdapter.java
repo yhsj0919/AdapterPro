@@ -20,7 +20,7 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
     private boolean mIsIgnoreChange = true;
 
     public NormalRecyclerViewAdapter(RecyclerView recyclerView) {
-        super(recyclerView, R.layout.item_normal);
+        super(recyclerView, R.layout.item_normal, R.layout.item_normal2);
     }
 
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
@@ -52,6 +52,13 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
         mIsIgnoreChange = true;
         viewHolderHelper.setChecked(R.id.cb_item_normal_status, model.selected);
         mIsIgnoreChange = false;
+    }
+
+
+    @Override
+    protected int bindType(int position, NormalModel model) {
+
+        return (position % 2);
     }
 
     public boolean isIgnoreChange() {

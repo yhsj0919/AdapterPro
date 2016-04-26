@@ -40,7 +40,7 @@ import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
  * @param <T> 适配的数据类型
  */
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewHolder> {
-    protected final int mItemLayoutId;
+    protected final int[] mItemLayoutIds;
     protected Context mContext;
     protected List<T> mDatas;
     protected OnItemChildClickListener mOnItemChildClickListener;
@@ -57,12 +57,12 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     protected RecyclerView mRecyclerView;
 
-    public BaseRecyclerViewAdapter(RecyclerView recyclerView, int itemLayoutId) {
+    public BaseRecyclerViewAdapter(RecyclerView recyclerView, int... itemLayoutId) {
         mRecyclerView = recyclerView;
         mContext = mRecyclerView.getContext();
-        mItemLayoutId = itemLayoutId;
+        mItemLayoutIds = itemLayoutId;
         mDatas = new ArrayList<>();
-        mObj=new HashMap<>();
+        mObj = new HashMap<>();
         if (mRecyclerView.getLayoutManager() == null) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         }
@@ -75,7 +75,8 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     @Override
     public BaseRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        BaseRecyclerViewHolder viewHolder = new BaseRecyclerViewHolder(mRecyclerView, LayoutInflater.from(mContext).inflate(mItemLayoutId, parent, false), mOnItemClickListener, mOnItemLongClickListener);
+
+        BaseRecyclerViewHolder viewHolder = new BaseRecyclerViewHolder(mRecyclerView, LayoutInflater.from(mContext).inflate(mItemLayoutIds[viewType], parent, false), mOnItemClickListener, mOnItemLongClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildClickListener(mOnItemChildClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildLongClickListener(mOnItemChildLongClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildCheckedChangeListener(mOnItemChildCheckedChangeListener);
@@ -95,6 +96,37 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     public void onBindViewHolder(BaseRecyclerViewHolder viewHolder, int position) {
         bindData(viewHolder.getViewHolderHelper(), position, getItem(position));
     }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return bindType(position, getItem(position));
+    }
+
+
+    /**
+     * 获取item布局的数量
+     *
+     * @return
+     */
+    public int getViewTypeCount() {
+        return mItemLayoutIds.length;
+    }
+
+    /**
+     * 绑定item布局类型
+     *
+     * @param position
+     * @param model
+     */
+    protected int bindType(int position, T model) {
+        if (getViewTypeCount() == 1) {
+            return 0;
+        } else {
+            throw new RuntimeException("Required method bindType was not overridden");
+        }
+    }
+
 
     /**
      * 填充item数据
