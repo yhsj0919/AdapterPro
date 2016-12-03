@@ -74,7 +74,7 @@ public class RecyclerViewDemoFragment extends Fragment implements OnItemClickLis
 
         }
 
-        mAdapter.setDatas(list);
+        mAdapter.setData(list);
 
 
     }

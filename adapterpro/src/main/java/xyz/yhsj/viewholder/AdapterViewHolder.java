@@ -27,11 +27,11 @@ import xyz.yhsj.helper.ViewHolderHelper;
  * 创建时间:15/5/21 上午1:00
  * 描述:适用于AdapterView的item的ViewHolder
  */
-public class BaseListViewHolder {
+public class AdapterViewHolder {
     protected View mConvertView;
     protected ViewHolderHelper mViewHolderHelper;
 
-    private BaseListViewHolder(ViewGroup parent, int layoutId) {
+    private AdapterViewHolder(ViewGroup parent, int layoutId) {
         mConvertView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         mConvertView.setTag(this);
         mViewHolderHelper = new ViewHolderHelper(parent, mConvertView);
@@ -45,11 +45,11 @@ public class BaseListViewHolder {
      * @param layoutId
      * @return
      */
-    public static BaseListViewHolder dequeueReusableAdapterViewHolder(View convertView, ViewGroup parent, int layoutId) {
+    public static AdapterViewHolder dequeueReusableAdapterViewHolder(View convertView, ViewGroup parent, int layoutId) {
         if (convertView == null) {
-            return new BaseListViewHolder(parent, layoutId);
+            return new AdapterViewHolder(parent, layoutId);
         }
-        return (BaseListViewHolder) convertView.getTag();
+        return (AdapterViewHolder) convertView.getTag();
     }
 
     public ViewHolderHelper getViewHolderHelper() {

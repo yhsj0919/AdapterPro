@@ -3,7 +3,8 @@ package xyz.yhsj.adapterdemo.adapter;
 import android.content.Context;
 import android.view.View;
 
-import xyz.yhsj.adapter.BaseListViewAdapter;
+
+import xyz.yhsj.adapter.BaseAdapterViewAdapter;
 import xyz.yhsj.adapterdemo.R;
 import xyz.yhsj.adapterdemo.model.ChatModel;
 import xyz.yhsj.helper.ViewHolderHelper;
@@ -11,7 +12,7 @@ import xyz.yhsj.helper.ViewHolderHelper;
 /**
  * Created by LOVE on 2015/12/14.
  */
-public class ListChatAdapter extends BaseListViewAdapter<ChatModel> {
+public class ListChatAdapter extends BaseAdapterViewAdapter<ChatModel> {
 
     public ListChatAdapter(Context context) {
         super(context, R.layout.item_chat);

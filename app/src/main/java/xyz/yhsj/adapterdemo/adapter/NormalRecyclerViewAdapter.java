@@ -20,7 +20,18 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
     private boolean mIsIgnoreChange = true;
 
     public NormalRecyclerViewAdapter(RecyclerView recyclerView) {
-        super(recyclerView, R.layout.item_normal, R.layout.item_normal2);
+        super(recyclerView);
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if (position % 2 == 0) {
+            return R.layout.item_normal;
+        }else {
+            return R.layout.item_normal2;
+        }
     }
 
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
@@ -28,7 +39,7 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
     }
 
     @Override
-    public void bindItemChildEvent(final ViewHolderHelper viewHolderHelper) {
+    public void bindItemChildEvent(final ViewHolderHelper viewHolderHelper, int viewType) {
         viewHolderHelper.setItemChildClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildLongClickListener(R.id.tv_item_normal_delete);
         viewHolderHelper.setItemChildCheckedChangeListener(R.id.cb_item_normal_status);
@@ -54,12 +65,6 @@ public class NormalRecyclerViewAdapter extends BaseRecyclerViewAdapter<NormalMod
         mIsIgnoreChange = false;
     }
 
-
-    @Override
-    protected int bindType(int position, NormalModel model) {
-
-        return (position % 2);
-    }
 
     public boolean isIgnoreChange() {
         return mIsIgnoreChange;

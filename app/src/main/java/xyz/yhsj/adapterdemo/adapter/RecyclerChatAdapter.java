@@ -16,9 +16,7 @@ public class RecyclerChatAdapter extends BaseRecyclerViewAdapter<ChatModel> {
         super(recyclerView, R.layout.item_chat);
     }
 
-    @Override
-    public void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
-    }
+   
 
     @Override
     public void bindData(ViewHolderHelper viewHolderHelper, int position, ChatModel model) {

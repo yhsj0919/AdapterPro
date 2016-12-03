@@ -2,7 +2,8 @@ package xyz.yhsj.adapterdemo.adapter;
 
 import android.content.Context;
 
-import xyz.yhsj.adapter.BaseListViewAdapter;
+
+import xyz.yhsj.adapter.BaseAdapterViewAdapter;
 import xyz.yhsj.adapterdemo.R;
 import xyz.yhsj.adapterdemo.model.NormalModel;
 import xyz.yhsj.helper.ViewHolderHelper;
@@ -11,7 +12,7 @@ import xyz.yhsj.helper.ViewHolderHelper;
 /**
  * Created by LOVE on 2015/12/14.
  */
-public class NormalAdapterViewAdapter extends BaseListViewAdapter<NormalModel> {
+public class NormalAdapterViewAdapter extends BaseAdapterViewAdapter<NormalModel> {
     private boolean mIsIgnoreChange = false;
 
     public NormalAdapterViewAdapter(Context context) {

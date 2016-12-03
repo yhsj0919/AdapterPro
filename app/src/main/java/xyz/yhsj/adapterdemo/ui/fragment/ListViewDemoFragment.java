@@ -57,7 +57,7 @@ public class ListViewDemoFragment extends Fragment implements AdapterView.OnItem
 
         }
 
-        mAdapter.setDatas(list);
+        mAdapter.setData(list);
 
 
     }

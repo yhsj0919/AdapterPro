@@ -99,6 +99,11 @@ public abstract class BaseTabLayoutAdapter<T> extends FragmentStatePagerAdapter 
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public Fragment getItem(int position) {
         return mFragments.get(position);
     }

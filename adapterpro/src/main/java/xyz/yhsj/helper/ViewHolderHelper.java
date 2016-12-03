@@ -18,67 +18,74 @@ package xyz.yhsj.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.SparseArray;
+import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import xyz.yhsj.adapter.BaseAdapterViewAdapter;
+import xyz.yhsj.adapter.BaseHeaderAndFooterAdapter;
+import xyz.yhsj.adapter.BaseRecyclerViewAdapter;
 import xyz.yhsj.event.OnItemChildCheckedChangeListener;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
-import xyz.yhsj.viewholder.BaseRecyclerViewHolder;
+import xyz.yhsj.event.OnNoDoubleClickListener;
+import xyz.yhsj.event.OnItemChildTouchListener;
+import xyz.yhsj.viewholder.RecyclerViewHolder;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:15/5/26 17:06
  * 描述:为AdapterView和RecyclerView的item设置常见属性（链式编程）
  */
-public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener {
-    protected final SparseArray<View> mViews;
+public class ViewHolderHelper implements View.OnLongClickListener, CompoundButton.OnCheckedChangeListener, View.OnTouchListener {
+    protected final SparseArrayCompat<View> mViews;
     protected OnItemChildClickListener mOnItemChildClickListener;
     protected OnItemChildLongClickListener mOnItemChildLongClickListener;
     protected OnItemChildCheckedChangeListener mOnItemChildCheckedChangeListener;
+    protected OnItemChildTouchListener mOnItemChildTouchListener;
     protected View mConvertView;
     protected Context mContext;
     protected int mPosition;
-    protected BaseRecyclerViewHolder mRecyclerViewHolder;
+    protected RecyclerViewHolder mRecyclerViewHolder;
     protected RecyclerView mRecyclerView;
 
-    protected ViewGroup mAdapterView;
+    protected AdapterView mAdapterView;
     /**
      * 留着以后作为扩充对象
      */
     protected Object mObj;
 
     public ViewHolderHelper(ViewGroup adapterView, View convertView) {
-        mViews = new SparseArray<>();
-        mAdapterView = adapterView;
+        mViews = new SparseArrayCompat<>();
+        mAdapterView = (AdapterView) adapterView;
         mConvertView = convertView;
         mContext = convertView.getContext();
     }
 
-    public ViewHolderHelper(RecyclerView recyclerView, View convertView) {
-        mViews = new SparseArray<>();
+    public ViewHolderHelper(RecyclerView recyclerView, RecyclerViewHolder recyclerViewHolder) {
+        mViews = new SparseArrayCompat<>();
         mRecyclerView = recyclerView;
-        mConvertView = convertView;
-        mContext = convertView.getContext();
-    }
-
-    public void setRecyclerViewHolder(BaseRecyclerViewHolder recyclerViewHolder) {
         mRecyclerViewHolder = recyclerViewHolder;
+        mConvertView = mRecyclerViewHolder.itemView;
+        mContext = mConvertView.getContext();
     }
 
-    public BaseRecyclerViewHolder getRecyclerViewHolder() {
+    public RecyclerViewHolder getRecyclerViewHolder() {
         return mRecyclerViewHolder;
     }
 
@@ -88,7 +95,7 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
 
     public int getPosition() {
         if (mRecyclerViewHolder != null) {
-            return mRecyclerViewHolder.getAdapterPosition();
+            return mRecyclerViewHolder.getAdapterPositionWrapper();
         }
         return mPosition;
     }
@@ -108,7 +115,22 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @param viewId
      */
     public void setItemChildClickListener(@IdRes int viewId) {
-        getView(viewId).setOnClickListener(this);
+        View view = getView(viewId);
+        if (view != null) {
+            view.setOnClickListener(new OnNoDoubleClickListener() {
+                @Override
+                public void onNoDoubleClick(View v) {
+                    if (mOnItemChildClickListener != null) {
+                        if (mRecyclerView != null) {
+                            mOnItemChildClickListener.onItemChildClick(mRecyclerView, v, getPosition());
+                        } else if (mAdapterView != null) {
+                            mOnItemChildClickListener.onItemChildClick(mAdapterView, v, getPosition());
+                        }
+                    }
+                }
+            });
+        }
+
     }
 
     /**
@@ -126,7 +148,31 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @param viewId
      */
     public void setItemChildLongClickListener(@IdRes int viewId) {
-        getView(viewId).setOnLongClickListener(this);
+        View view = getView(viewId);
+        if (view != null) {
+            view.setOnLongClickListener(this);
+        }
+    }
+
+    /**
+     * 设置 RecyclerView 中的 item 子控件触摸事件监听器
+     *
+     * @param onItemChildTouchListener
+     */
+    public void setOnItemChildTouchListener(OnItemChildTouchListener onItemChildTouchListener) {
+        mOnItemChildTouchListener = onItemChildTouchListener;
+    }
+
+    /**
+     * 为 id 为 viewId 的 RecyclerView 的 item 子控件设置触摸事件监听器
+     *
+     * @param viewId
+     */
+    public void setRVItemChildTouchListener(@IdRes int viewId) {
+        View view = getView(viewId);
+        if (view != null) {
+            view.setOnTouchListener(this);
+        }
     }
 
     /**
@@ -144,20 +190,18 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @param viewId
      */
     public void setItemChildCheckedChangeListener(@IdRes int viewId) {
-        if (getView(viewId) instanceof CompoundButton) {
-            ((CompoundButton) getView(viewId)).setOnCheckedChangeListener(this);
+        View view = getView(viewId);
+        if (view != null && view instanceof CompoundButton) {
+            ((CompoundButton) view).setOnCheckedChangeListener(this);
         }
     }
 
     @Override
-    public void onClick(View v) {
-        if (mOnItemChildClickListener != null) {
-            if (mRecyclerView != null) {
-                mOnItemChildClickListener.onItemChildClick(mRecyclerView, v, getPosition());
-            } else if (mAdapterView != null) {
-                mOnItemChildClickListener.onItemChildClick(mAdapterView, v, getPosition());
-            }
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (mOnItemChildTouchListener != null && mRecyclerView != null) {
+            return mOnItemChildTouchListener.onItemChildTouch(mRecyclerViewHolder, view, motionEvent);
         }
+        return false;
     }
 
     @Override
@@ -176,9 +220,21 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (mOnItemChildCheckedChangeListener != null) {
             if (mRecyclerView != null) {
-                mOnItemChildCheckedChangeListener.onItemChildCheckedChanged(mRecyclerView, buttonView, getPosition(), isChecked);
+                BaseRecyclerViewAdapter recyclerViewAdapter;
+
+                RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+                if (adapter instanceof BaseHeaderAndFooterAdapter) {
+                    recyclerViewAdapter = (BaseRecyclerViewAdapter) ((BaseHeaderAndFooterAdapter) adapter).getInnerAdapter();
+                } else {
+                    recyclerViewAdapter = (BaseRecyclerViewAdapter) adapter;
+                }
+                if (!recyclerViewAdapter.isIgnoreCheckedChanged()) {
+                    mOnItemChildCheckedChangeListener.onItemChildCheckedChanged(mRecyclerView, buttonView, getPosition(), isChecked);
+                }
             } else if (mAdapterView != null) {
-                mOnItemChildCheckedChangeListener.onItemChildCheckedChanged(mAdapterView, buttonView, getPosition(), isChecked);
+                if (!((BaseAdapterViewAdapter) mAdapterView.getAdapter()).isIgnoreCheckedChanged()) {
+                    mOnItemChildCheckedChangeListener.onItemChildCheckedChanged(mAdapterView, buttonView, getPosition(), isChecked);
+                }
             }
         }
     }
@@ -243,8 +299,10 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @return
      */
     public ViewHolderHelper setText(@IdRes int viewId, CharSequence text) {
-        TextView view = getView(viewId);
-        view.setText(text);
+        if (text == null) {
+            text = "";
+        }
+        getTextView(viewId).setText(text);
         return this;
     }
 
@@ -256,8 +314,31 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @return
      */
     public ViewHolderHelper setText(@IdRes int viewId, @StringRes int stringResId) {
-        TextView view = getView(viewId);
-        view.setText(stringResId);
+        getTextView(viewId).setText(stringResId);
+        return this;
+    }
+
+    /**
+     * 设置对应id的控件的文字大小，单位为 sp
+     *
+     * @param viewId
+     * @param size   文字大小，单位为 sp
+     * @return
+     */
+    public ViewHolderHelper setTextSizeSp(@IdRes int viewId, float size) {
+        getTextView(viewId).setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        return this;
+    }
+
+    /**
+     * 设置对应id的控件的文字是否为粗体
+     *
+     * @param viewId
+     * @param isBold 是否为粗体
+     * @return
+     */
+    public ViewHolderHelper setIsBold(@IdRes int viewId, boolean isBold) {
+        getTextView(viewId).getPaint().setTypeface(isBold ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
         return this;
     }
 
@@ -269,8 +350,10 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @return
      */
     public ViewHolderHelper setHtml(@IdRes int viewId, String source) {
-        TextView view = getView(viewId);
-        view.setText(Html.fromHtml(source));
+        if (source == null) {
+            source = "";
+        }
+        getTextView(viewId).setText(Html.fromHtml(source));
         return this;
     }
 
@@ -323,8 +406,7 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @return
      */
     public ViewHolderHelper setTextColorRes(@IdRes int viewId, @ColorRes int textColorResId) {
-        TextView view = getView(viewId);
-        view.setTextColor(mContext.getResources().getColor(textColorResId));
+        getTextView(viewId).setTextColor(mContext.getResources().getColor(textColorResId));
         return this;
     }
 
@@ -334,8 +416,7 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
      * @return
      */
     public ViewHolderHelper setTextColor(@IdRes int viewId, int textColor) {
-        TextView view = getView(viewId);
-        view.setTextColor(textColor);
+        getTextView(viewId).setTextColor(textColor);
         return this;
     }
 
@@ -383,4 +464,15 @@ public class ViewHolderHelper implements View.OnClickListener, View.OnLongClickL
         return this;
     }
 
+    /**
+     * 设置字体是否为粗体
+     *
+     * @param viewId
+     * @param isBold
+     * @return
+     */
+    public ViewHolderHelper setBold(@IdRes int viewId, boolean isBold) {
+        getTextView(viewId).getPaint().setTypeface(isBold ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        return this;
+    }
 }

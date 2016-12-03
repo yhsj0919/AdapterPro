@@ -3,7 +3,7 @@
 
 新增了tablayout的adapter和帮助类。
 
-BaseListViewAdapter适用于list，GridView
+BaseAdapterViewAdapter适用于list，GridView
 
 BaseRecyclerViewAdapter 适用于RecyclerView
 

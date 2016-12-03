@@ -56,7 +56,7 @@ public class GridViewDemoFragment extends Fragment implements AdapterView.OnItem
 
         }
 
-        mAdapter.setDatas(list);
+        mAdapter.setData(list);
 
 
     }

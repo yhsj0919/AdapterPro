@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 bingoogolapple
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,57 +17,51 @@
 package xyz.yhsj.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import xyz.yhsj.event.OnItemChildCheckedChangeListener;
 import xyz.yhsj.event.OnItemChildClickListener;
 import xyz.yhsj.event.OnItemChildLongClickListener;
 import xyz.yhsj.helper.ViewHolderHelper;
-import xyz.yhsj.viewholder.BaseListViewHolder;
+import xyz.yhsj.viewholder.AdapterViewHolder;
 
 /**
- * Listview适配器
- * <p>
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:15/5/21 上午1:05
  * 描述:AdapterView适配器
  */
-public abstract class BaseListViewAdapter<T> extends BaseAdapter {
+public abstract class BaseAdapterViewAdapter<M> extends BaseAdapter {
     protected final int mItemLayoutId;
     protected Context mContext;
-    protected List<T> mDatas;
-
-    /**
-     * 扩充数据，用于某些特殊的多数据源场景
-     */
-    protected HashMap<String, Object> mObj;
-
+    protected List<M> mData;
     protected OnItemChildClickListener mOnItemChildClickListener;
     protected OnItemChildLongClickListener mOnItemChildLongClickListener;
     protected OnItemChildCheckedChangeListener mOnItemChildCheckedChangeListener;
+    /**
+     * 在填充数据列表时，忽略选中状态变化
+     */
+    private boolean mIsIgnoreCheckedChanged = true;
 
-    public BaseListViewAdapter(Context context, int itemLayoutId) {
+    public BaseAdapterViewAdapter(Context context, int itemLayoutId) {
         mContext = context;
         mItemLayoutId = itemLayoutId;
-        mDatas = new ArrayList<>();
-        mObj=new HashMap<>();
+        mData = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return mDatas.size();
+        return mData.size();
     }
 
     @Override
-    public T getItem(int position) {
-        return mDatas.get(position);
+    public M getItem(int position) {
+        return mData.get(position);
     }
 
     @Override
@@ -77,7 +71,10 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final BaseListViewHolder viewHolder = BaseListViewHolder.dequeueReusableAdapterViewHolder(convertView, parent, mItemLayoutId);
+        // 在设置值的过程中忽略选中状态变化
+        mIsIgnoreCheckedChanged = true;
+
+        final AdapterViewHolder viewHolder = AdapterViewHolder.dequeueReusableAdapterViewHolder(convertView, parent, mItemLayoutId);
         viewHolder.getViewHolderHelper().setPosition(position);
         viewHolder.getViewHolderHelper().setOnItemChildClickListener(mOnItemChildClickListener);
         viewHolder.getViewHolderHelper().setOnItemChildLongClickListener(mOnItemChildLongClickListener);
@@ -85,25 +82,31 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
         bindItemChildEvent(viewHolder.getViewHolderHelper());
 
         bindData(viewHolder.getViewHolderHelper(), position, getItem(position));
+
+        mIsIgnoreCheckedChanged = false;
+
         return viewHolder.getConvertView();
+    }
+
+    public boolean isIgnoreCheckedChanged() {
+        return mIsIgnoreCheckedChanged;
     }
 
     /**
      * 为item的孩子节点设置监听器，并不是每一个数据列表都要为item的子控件添加事件监听器，所以这里采用了空实现，需要设置事件监听器时重写该方法即可
      *
-     * @param viewHolderHelper
+     * @param helper
      */
-    protected void bindItemChildEvent(ViewHolderHelper viewHolderHelper) {
+    protected void bindItemChildEvent(ViewHolderHelper helper) {
     }
 
     /**
      * 填充item数据
-     *
-     * @param viewHolderHelper
+     *  @param helper
      * @param position
      * @param model
      */
-    protected abstract void bindData(ViewHolderHelper viewHolderHelper, int position, T model);
+    protected abstract void bindData(ViewHolderHelper helper, int position, M model);
 
     /**
      * 设置item中的子控件点击事件监听器
@@ -137,18 +140,18 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      *
      * @return
      */
-    public List<T> getDatas() {
-        return mDatas;
+    public List<M> getData() {
+        return mData;
     }
 
     /**
      * 在集合头部添加新的数据集合（下拉从服务器获取最新的数据集合，例如新浪微博加载最新的几条微博数据）
      *
-     * @param datas
+     * @param data
      */
-    public void addDatasToFirst(List<T> datas) {
-        if (datas != null) {
-            mDatas.addAll(0, datas);
+    public void addNewData(List<M> data) {
+        if (data != null) {
+            mData.addAll(0, data);
             notifyDataSetChanged();
         }
     }
@@ -156,11 +159,11 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
     /**
      * 在集合尾部添加更多数据集合（上拉从服务器获取更多的数据集合，例如新浪微博列表上拉加载更晚时间发布的微博数据）
      *
-     * @param datas
+     * @param data
      */
-    public void addDatasToLast(List<T> datas) {
-        if (datas != null) {
-            mDatas.addAll(mDatas.size(), datas);
+    public void addMoreData(List<M> data) {
+        if (data != null) {
+            mData.addAll(mData.size(), data);
             notifyDataSetChanged();
         }
     }
@@ -168,13 +171,13 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
     /**
      * 设置全新的数据集合，如果传入null，则清空数据列表（第一次从服务器加载数据，或者下拉刷新当前界面数据表）
      *
-     * @param datas
+     * @param data
      */
-    public void setDatas(List<T> datas) {
-        if (datas != null) {
-            mDatas = datas;
+    public void setData(List<M> data) {
+        if (data != null) {
+            mData = data;
         } else {
-            mDatas.clear();
+            mData.clear();
         }
         notifyDataSetChanged();
     }
@@ -183,7 +186,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      * 清空数据列表
      */
     public void clear() {
-        mDatas.clear();
+        mData.clear();
         notifyDataSetChanged();
     }
 
@@ -193,7 +196,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      * @param position
      */
     public void removeItem(int position) {
-        mDatas.remove(position);
+        mData.remove(position);
         notifyDataSetChanged();
     }
 
@@ -202,8 +205,8 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      *
      * @param model
      */
-    public void removeItem(T model) {
-        mDatas.remove(model);
+    public void removeItem(M model) {
+        mData.remove(model);
         notifyDataSetChanged();
     }
 
@@ -213,8 +216,8 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      * @param position
      * @param model
      */
-    public void addItem(int position, T model) {
-        mDatas.add(position, model);
+    public void addItem(int position, M model) {
+        mData.add(position, model);
         notifyDataSetChanged();
     }
 
@@ -223,7 +226,7 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      *
      * @param model
      */
-    public void addItemToFirst(T model) {
+    public void addFirstItem(M model) {
         addItem(0, model);
     }
 
@@ -232,8 +235,8 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      *
      * @param model
      */
-    public void addItemToLast(T model) {
-        addItem(mDatas.size(), model);
+    public void addLastItem(M model) {
+        addItem(mData.size(), model);
     }
 
     /**
@@ -242,8 +245,8 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      * @param location
      * @param newModel
      */
-    public void setItem(int location, T newModel) {
-        mDatas.set(location, newModel);
+    public void setItem(int location, M newModel) {
+        mData.set(location, newModel);
         notifyDataSetChanged();
     }
 
@@ -253,27 +256,36 @@ public abstract class BaseListViewAdapter<T> extends BaseAdapter {
      * @param oldModel
      * @param newModel
      */
-    public void setItem(T oldModel, T newModel) {
-        setItem(mDatas.indexOf(oldModel), newModel);
+    public void setItem(M oldModel, M newModel) {
+        setItem(mData.indexOf(oldModel), newModel);
     }
 
     /**
-     * 交换两个数据条目的位置
+     * 移动数据条目的位置
      *
      * @param fromPosition
      * @param toPosition
      */
     public void moveItem(int fromPosition, int toPosition) {
-        Collections.swap(mDatas, fromPosition, toPosition);
+        mData.add(toPosition, mData.remove(fromPosition));
         notifyDataSetChanged();
     }
 
-
-    public Object getmObj(String key) {
-        return mObj.get(key);
+    /**
+     * @return 获取第一个数据模型
+     */
+    public
+    @Nullable
+    M getFirstItem() {
+        return getCount() > 0 ? getItem(0) : null;
     }
 
-    public void addmObj(String key, Object mObj) {
-        this.mObj.put(key, mObj);
+    /**
+     * @return 获取最后一个数据模型
+     */
+    public
+    @Nullable
+    M getLastItem() {
+        return getCount() > 0 ? getItem(getCount() - 1) : null;
     }
 }
