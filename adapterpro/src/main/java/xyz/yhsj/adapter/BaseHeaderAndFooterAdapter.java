@@ -20,7 +20,6 @@ import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,8 +47,6 @@ public class BaseHeaderAndFooterAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.w("onCreateViewHolder: ", viewType + ">>>");
-
         if (mHeaderViews.get(viewType) != null) {
             return new RecyclerView.ViewHolder(mHeaderViews.get(viewType)) {
             };
@@ -143,8 +140,18 @@ public class BaseHeaderAndFooterAdapter extends RecyclerView.Adapter<RecyclerVie
         mHeaderViews.put(mHeaderViews.size() + BASE_ITEM_TYPE_HEADER, view);
     }
 
+    public void removeHeaderView(int index) {
+        mHeaderViews.delete(index + BASE_ITEM_TYPE_HEADER);
+        notifyDataSetChanged();
+    }
+
     public void addFooterView(View view) {
         mFootViews.put(mFootViews.size() + BASE_ITEM_TYPE_FOOTER, view);
+    }
+
+    public void removeFooterView(int index) {
+        mFootViews.delete(index + BASE_ITEM_TYPE_FOOTER);
+        notifyDataSetChanged();
     }
 
     public int getHeadersCount() {

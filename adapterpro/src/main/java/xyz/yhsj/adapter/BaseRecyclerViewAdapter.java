@@ -18,6 +18,7 @@ package xyz.yhsj.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -391,8 +392,17 @@ public abstract class BaseRecyclerViewAdapter<M> extends RecyclerView.Adapter<Re
         getHeaderAndFooterAdapter().addHeaderView(headerView);
     }
 
+    public void removeHeaderView(int index) {
+        getHeaderAndFooterAdapter().removeHeaderView(index);
+    }
+
+
     public void addFooterView(View footerView) {
         getHeaderAndFooterAdapter().addFooterView(footerView);
+    }
+
+    public void removeFooterView(int index) {
+        getHeaderAndFooterAdapter().removeFooterView(index);
     }
 
     public int getHeadersCount() {
